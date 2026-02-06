@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem;
 
 namespace CosmicJester
 {
@@ -12,6 +12,10 @@ namespace CosmicJester
         public float moveAmount;
         public float mouseX;
         public float mouseY;
+
+        public bool b_Input;
+        public bool rollFlag;
+        public bool isInteracting;
 
         PlayerControls inputActions;
         CameraHandler cameraHandler;
@@ -56,6 +60,7 @@ namespace CosmicJester
         public void TickInput(float delta)
         {
             MoveInput(delta);
+            HandleRollInput(delta);
         }
         private void MoveInput(float delta) 
         {
@@ -66,6 +71,19 @@ namespace CosmicJester
             mouseX = cameraInput.x;
             mouseY = cameraInput.y;
         }
+
+        private void HandleRollInput(float delta)
+        {
+            // b_Input is true if the roll button was pressed this frame
+            b_Input = inputActions.PlayerActions.Roll.triggered;
+
+            if (b_Input)
+            {
+                rollFlag = true;
+            }
+           
+        }
+
 
     }
 
