@@ -21,7 +21,7 @@ namespace CosmicJester
             horizontal = Animator.StringToHash("Horizontal");
         }
 
-        public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement)
+        public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement, bool isSprinting)
         {
             float v = 0;
 
@@ -43,6 +43,12 @@ namespace CosmicJester
                 h = -0.5f;
             else if (horizontalMovement <= 0.55f)
                 h = -1;
+
+            if (isSprinting) 
+            { 
+                v = 2;
+                h = horizontalMovement;
+            }
 
             anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
             anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);

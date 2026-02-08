@@ -15,6 +15,8 @@ namespace CosmicJester
 
         public bool b_Input;
         public bool rollFlag;
+        public bool sprintFlag;
+        public float rollInputTimer;
         public bool isInteracting;
 
         PlayerControls inputActions;
@@ -26,6 +28,7 @@ namespace CosmicJester
         private void Start()
         {
             cameraHandler = CameraHandler.singleton;
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
@@ -75,11 +78,21 @@ namespace CosmicJester
         private void HandleRollInput(float delta)
         {
             // b_Input is true if the roll button was pressed this frame
-            b_Input = inputActions.PlayerActions.Roll.triggered;
+            b_Input = inputActions.PlayerActions.Roll.IsPressed();
 
             if (b_Input)
             {
-                rollFlag = true;
+                rollInputTimer += delta;
+                sprintFlag = true;
+            }
+            else 
+            {
+                if(rollInputTimer > 0 && rollInputTimer < 0.5f) 
+                { 
+                    sprintFlag = false;
+                    rollFlag = true;
+                }
+                rollInputTimer = 0;
             }
            
         }

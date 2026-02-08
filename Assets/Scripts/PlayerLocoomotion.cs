@@ -21,6 +21,10 @@ namespace CosmicJester
         float movementSpeed = 5;
         [SerializeField]
         float rotationSpeed = 10;
+        [SerializeField]
+        float sprintSpeed = 7;
+
+        public bool isSprinting;
 
         void Start()
         {
@@ -34,6 +38,7 @@ namespace CosmicJester
 
         public void Update()
         {
+            isSprinting = inputHandler.b_Input;
             float delta = Time.deltaTime;
             inputHandler.TickInput(delta);
             HandleMovement(delta);
@@ -71,18 +76,26 @@ namespace CosmicJester
 
         public void HandleMovement(float delta)
         {
+            if (inputHandler.rollFlag) { return; }
             moveDirection = cameraObject.forward * inputHandler.vertical;
             moveDirection += cameraObject.right * inputHandler.horizontal;
             moveDirection.Normalize();
             moveDirection.y = 0;
 
             float speed = movementSpeed;
-            moveDirection *= speed;
+            if (inputHandler.sprintFlag) 
+            {
+                speed = sprintSpeed;
+                isSprinting = true;
+                moveDirection *= speed;
+            }
+            else { moveDirection *= speed; }
+                
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.linearVelocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
 
             if (animatorHandler.canRotate)
             {
