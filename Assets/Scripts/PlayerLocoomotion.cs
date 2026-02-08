@@ -117,6 +117,7 @@ namespace CosmicJester
                 else
                 {
                     animatorHandler.PlayTargetAnimation("BackStep", true);
+
                 }
             }
         }
