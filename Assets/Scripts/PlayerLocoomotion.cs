@@ -75,13 +75,13 @@ namespace CosmicJester
             moveDirection.y = 0;
 
             float speed = movementSpeed;
-            if (inputHandler.sprintFlag) 
+            if (inputHandler.sprintFlag && inputHandler.moveAmount >0) 
             {
                 speed = sprintSpeed;
                 playerManager.isSprinting = true;
                 moveDirection *= speed;
             }
-            else { moveDirection *= speed; }
+            else { moveDirection *= speed; playerManager.isSprinting = false; }
                 
 
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
