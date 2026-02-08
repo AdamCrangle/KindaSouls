@@ -6,18 +6,51 @@ namespace CosmicJester
     {
         InputHandler inputHandler;
         Animator animator;
+        CameraHandler cameraHandler;
+        PlayerLocoomotion playerLocoomotion;
+
+        [Header("Player Flags")]
+        public bool isInteracting;
+        public bool isSprinting;
 
         void Start()
         {
             inputHandler = GetComponent<InputHandler>();
             animator = GetComponentInChildren<Animator>();
+            playerLocoomotion = GetComponent<PlayerLocoomotion>();
+            cameraHandler = CameraHandler.singleton;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         void Update()
         {
-            inputHandler.isInteracting = animator.GetBool("isInteracting");
+            float delta = Time.deltaTime;
+
+            isInteracting = animator.GetBool("isInteracting");
+            inputHandler.TickInput(delta);
+            playerLocoomotion.HandleMovement(delta);
+            playerLocoomotion.HandleRollingAndSprinting(delta);
+
+            
+        }
+
+        private void FixedUpdate()
+        {
+            float delta = Time.fixedDeltaTime;
+
+            if (cameraHandler != null)
+            {
+                cameraHandler.FollowTarget(delta);
+                cameraHandler.HandleCameraRotation(delta, inputHandler.mouseX, inputHandler.mouseY);
+            }
+        }
+
+        private void LateUpdate()
+        {
             inputHandler.rollFlag = false;
             inputHandler.sprintFlag = false;
+            isSprinting = inputHandler.b_Input;
         }
     }
 }

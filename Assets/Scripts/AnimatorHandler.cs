@@ -5,18 +5,20 @@ namespace CosmicJester
 {
     public class AnimatorHandler : MonoBehaviour
     {
+        PlayerManager playerManager;
         public Animator anim;
-        public InputHandler inputHandler;
-        public PlayerLocoomotion playerLocoomotion;
+        InputHandler inputHandler;
+        PlayerLocoomotion playerLocoomotion;
         int vertical;
         int horizontal;
         public bool canRotate;
 
         public void Intialize()
         {
+            playerManager = GetComponentInParent<PlayerManager>();
+            inputHandler = GetComponentInParent<InputHandler>();
+            playerLocoomotion = GetComponentInParent<PlayerLocoomotion>();
             anim = GetComponent<Animator>();
-            inputHandler.GetComponentInParent<InputHandler>();
-            playerLocoomotion.GetComponentInParent<PlayerLocoomotion>();
             vertical = Animator.StringToHash("Vertical");
             horizontal = Animator.StringToHash("Horizontal");
         }
@@ -73,7 +75,7 @@ namespace CosmicJester
 
         private void OnAnimatorMove()
         {
-            if(inputHandler.isInteracting == false) 
+            if(playerManager.isInteracting == false) 
             {
                 return;
             }

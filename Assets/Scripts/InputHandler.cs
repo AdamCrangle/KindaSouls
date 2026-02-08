@@ -17,31 +17,15 @@ namespace CosmicJester
         public bool rollFlag;
         public bool sprintFlag;
         public float rollInputTimer;
-        public bool isInteracting;
 
         PlayerControls inputActions;
-        CameraHandler cameraHandler;
 
         Vector2 movementInput;
         Vector2 cameraInput;
 
-        private void Start()
-        {
-            cameraHandler = CameraHandler.singleton;
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
 
-        private void FixedUpdate()
-        {
-            float delta = Time.fixedDeltaTime;
 
-            if(cameraHandler != null) 
-            {
-                cameraHandler.FollowTarget(delta);
-                cameraHandler.HandleCameraRotation(delta, mouseX, mouseY);
-            }
-        }
+
 
         public void OnEnable()
         {

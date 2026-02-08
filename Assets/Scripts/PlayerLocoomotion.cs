@@ -4,6 +4,7 @@ namespace CosmicJester
 {
     public class PlayerLocoomotion : MonoBehaviour
     {
+        PlayerManager playerManager;
         Transform cameraObject;
         InputHandler inputHandler;
         Vector3 moveDirection;
@@ -16,33 +17,24 @@ namespace CosmicJester
         public new Rigidbody rigidbody;
         public GameObject normalCamera;
 
-        [Header("Stats")]
+        [Header(" Movement Stats")]
         [SerializeField]
         float movementSpeed = 5;
         [SerializeField]
-        float rotationSpeed = 10;
-        [SerializeField]
         float sprintSpeed = 7;
+        [SerializeField]
+        float rotationSpeed = 10;
 
-        public bool isSprinting;
 
         void Start()
         {
+            playerManager = GetComponent<PlayerManager>();
             rigidbody = GetComponent<Rigidbody>();
             inputHandler = GetComponent<InputHandler>();
             animatorHandler = GetComponentInChildren<AnimatorHandler>();
             cameraObject = Camera.main.transform;
             myTransform = transform;
             animatorHandler.Intialize();
-        }
-
-        public void Update()
-        {
-            isSprinting = inputHandler.b_Input;
-            float delta = Time.deltaTime;
-            inputHandler.TickInput(delta);
-            HandleMovement(delta);
-            HandleRollingAndSprinting(delta);
         }
 
         #region Movement
@@ -86,7 +78,7 @@ namespace CosmicJester
             if (inputHandler.sprintFlag) 
             {
                 speed = sprintSpeed;
-                isSprinting = true;
+                playerManager.isSprinting = true;
                 moveDirection *= speed;
             }
             else { moveDirection *= speed; }
@@ -95,7 +87,7 @@ namespace CosmicJester
             Vector3 projectedVelocity = Vector3.ProjectOnPlane(moveDirection, normalVector);
             rigidbody.linearVelocity = projectedVelocity;
 
-            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSprinting);
+            animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, playerManager.isSprinting);
 
             if (animatorHandler.canRotate)
             {
