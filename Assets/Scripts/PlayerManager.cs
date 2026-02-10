@@ -12,6 +12,8 @@ namespace CosmicJester
         [Header("Player Flags")]
         public bool isInteracting;
         public bool isSprinting;
+        public bool isInAir;
+        public bool isGrounded;
 
         void Start()
         {
@@ -31,6 +33,7 @@ namespace CosmicJester
             inputHandler.TickInput(delta);
             playerLocoomotion.HandleMovement(delta);
             playerLocoomotion.HandleRollingAndSprinting(delta);
+            playerLocoomotion.HandleFalling(delta, playerLocoomotion.moveDirection);
 
             
         }
@@ -51,6 +54,11 @@ namespace CosmicJester
             inputHandler.rollFlag = false;
             inputHandler.sprintFlag = false;
             isSprinting = inputHandler.b_Input;
+
+            if (isInAir) 
+            {
+                playerLocoomotion.inAirTimer = playerLocoomotion.inAirTimer + Time.deltaTime;
+            }
         }
     }
 }
